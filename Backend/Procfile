@@ -1,1 +1,1 @@
-web: gunicorn Backend.wsgi
+web: streamlit run ../Frontend/chat.py --server.port $PORT --server.address 0.0.0.0
