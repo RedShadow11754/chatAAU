@@ -254,7 +254,7 @@ with st.sidebar:
     # Clear chat button (functionality unchanged)
     if st.button("🗑 Clear Chat"):
         try:
-            requests.get("http://localhost:8000/clear_chat?session_id=user1")
+            requests.get("https://chataau-2.onrender.com/clear_chat?session_id=user1")
         except:
             pass
         st.session_state.messages = []
@@ -297,7 +297,7 @@ if prompt := st.chat_input("Ask me anything about AAU..."):
         # Show spinner while waiting for backend
         with st.spinner("Thinking..."):
             try:
-                backend_url = "http://localhost:8000/stream_answer"
+                backend_url = "https://chataau-2.onrender.com/stream_answer"
                 session_id = "user1"
                 response = requests.get(
                     f"{backend_url}?question={prompt}&session_id={session_id}"
