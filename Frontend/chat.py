@@ -308,7 +308,10 @@ if prompt := st.chat_input("Ask me anything about AAU..."):
             except Exception:
                 full_response = "⚠️ Backend server is not running."
 
-        placeholder.markdown(f"{full_response}\n\n **source:**\n\n{source}")
+        try:
+            placeholder.markdown(f"{full_response}\n\n **source:**\n\n{source}")
+        except:
+            placeholder.markdown(f"{full_response}\n\n **source:**\n\nNo source")
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
 
