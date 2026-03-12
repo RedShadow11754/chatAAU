@@ -1,29 +1,19 @@
-import json
 import os
 import dotenv
-from langchain_core.vectorstores import VectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_core.documents import Document
 from langchain_groq import ChatGroq
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 dotenv.load_dotenv()
 
-# ----------------------------------------------------------------------
-# Load expensive resources ONCE at module level
-# ----------------------------------------------------------------------
 _embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 _persist_dir = os.path.join(os.path.dirname(__file__), "chroma_db")
 
-# Load vector store (assumes it was already created and persisted)
 _vector_store = Chroma(
     persist_directory=_persist_dir,
     embedding_function=_embeddings
 )
 
-# Load LLM (API key from environment)
 _api_key = os.getenv("GROQ_API_KEY")
 if not _api_key:
     raise ValueError("GROQ_API_KEY not set in environment")
@@ -33,9 +23,6 @@ _llm = ChatGroq(api_key=_api_key, model_name="llama-3.1-8b-instant")
 _retriever = _vector_store.as_retriever(search_kwargs={"k": 4})
 
 
-# ----------------------------------------------------------------------
-# Simple conversation memory store
-# ----------------------------------------------------------------------
 _chat_memory = {}
 def clear_memory(session_id):
     if session_id in _chat_memory:
@@ -124,7 +111,6 @@ Question:
             {"role": "assistant", "content": response.content}
         )
 
-        # Extract sources (retrieved documents) as a list of dicts with content and metadata
         sources = []
         for doc in self.retrieved:
             source_info = {"content": doc.page_content}
@@ -140,11 +126,5 @@ Question:
                     source = sources[0]
                 except:
                     source = "no source"
-                # try:
-                #     source = sources[0]["content"]
-                # except:
-                #     source = sources[0]
 
         return response.content, source
-# ai = MyAI("What is the presedential scholarsship and how much is the monthly stipend?")
-# print(ai.respond())
