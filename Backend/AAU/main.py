@@ -1,9 +1,8 @@
 import os
 import dotenv
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_groq import ChatGroq
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
-
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
 
 dotenv.load_dotenv()
@@ -12,7 +11,7 @@ _persist_dir = os.path.join(os.path.dirname(__file__), "chroma_db")
 
 _keyy = os.getenv("HF_TOKEN")
 
-_embeddings = HuggingFaceInferenceAPIEmbeddings(
+_embeddings = HuggingFaceEndpointEmbeddings(
     api_key=_keyy,
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
