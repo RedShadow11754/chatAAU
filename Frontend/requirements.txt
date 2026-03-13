@@ -1,0 +1,5 @@
+# Streamlit UI
+streamlit>=1.30.0
+requests>=2.32.0
+
+# Environment variables (if you plan to use .env)
